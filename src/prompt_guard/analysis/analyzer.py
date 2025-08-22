@@ -1,3 +1,4 @@
+from .detectors.dns_exfiltration import DnsExfiltrationDetector
 from .detectors.markdown_exfiltration import MarkdownImageExfiltrationDetector
 from .schemas import AnalysisResult
 
@@ -6,6 +7,7 @@ class PromptAnalyzer:
     def __init__(self):
         self._detectors = [
             MarkdownImageExfiltrationDetector(),
+            DnsExfiltrationDetector(),
         ]
 
     def analyze(self, prompt: str) -> AnalysisResult:
