@@ -12,6 +12,21 @@ fastapi = "^0.111.0"
 uvicorn = {extras = ["standard"], version = "^0.30.1"}
 
 
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+ruff = "^0.12.10"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+lint.select = ["E", "F", "I", "W", "B"] # E/W=pycodestyle, F=pyflakes, I=isort, B=flake8-bugbear
+lint.ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
