@@ -1,14 +1,16 @@
-from .schemas import AnalysisResult, Vulnerability
+from .detectors.markdown_exfiltration import MarkdownImageExfiltrationDetector
+from .schemas import AnalysisResult
 
 
 class PromptAnalyzer:
-    def analyze(self, prompt: str) -> AnalysisResult:
-        if "test" in prompt.lower():
-            dummy_vulnerability = Vulnerability(
-                category="Placeholder",
-                description="This is a dummy vulnerability for testing purposes.",
-                confidence=0.9,
-            )
-            return AnalysisResult(vulnerabilities=[dummy_vulnerability])
+    def __init__(self):
+        self._detectors = [
+            MarkdownImageExfiltrationDetector(),
+        ]
 
-        return AnalysisResult()
+    def analyze(self, prompt: str) -> AnalysisResult:
+        all_vulnerabilities = []
+        for detector in self._detectors:
+            all_vulnerabilities.extend(detector.run(prompt))
+
+        return AnalysisResult(vulnerabilities=all_vulnerabilities)
