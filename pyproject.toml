@@ -1,0 +1,17 @@
+[project]
+name = "prompt-guard"
+version = "0.1.0"
+description = "A tool to analyze LLM prompts for potential security vulnerabilities."
+authors = [
+    {name = "zhu-weijie",email = "byzhubaiyuan@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = "^3.12"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
