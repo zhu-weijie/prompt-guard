@@ -9,7 +9,7 @@ RUN pip install poetry
 
 COPY poetry.lock pyproject.toml ./
 
-RUN poetry config virtualenvs.in-project true && poetry install --no-root --no-dev
+RUN poetry config virtualenvs.in-project true && poetry install --no-root --only main
 
 FROM python:3.12-slim
 
