@@ -20,3 +20,11 @@ def test_invisible_char_negative_case():
     vulnerabilities = list(detector.run(prompt))
 
     assert len(vulnerabilities) == 0
+
+
+def test_invisible_char_handles_newlines_safely():
+    detector = InvisibleCharacterDetector()
+    prompt = "This is a safe prompt\nwith multiple lines."
+    vulnerabilities = list(detector.run(prompt))
+
+    assert len(vulnerabilities) == 0

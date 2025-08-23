@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PromptGuard</title>
     <style>
-        body { font-family: sans-serif; margin: 2em; }
-        textarea { width: 100%; height: 150px; margin-bottom: 1em; }
-        #results { margin-top: 1em; padding: 1em; border: 1px solid #ccc; background-color: #f9f9f9; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 2em; background-color: #f8f9fa; color: #212529; }
+        h1 { color: #343a40; }
+        textarea { width: 100%; height: 150px; margin-bottom: 1em; padding: 0.5em; border: 1px solid #ced4da; border-radius: 0.25rem; }
+        button { padding: 0.5em 1em; color: #fff; background-color: #007bff; border: none; border-radius: 0.25rem; cursor: pointer; }
+        #results-container { margin-top: 1.5em; }
+        .vuln-card { border: 1px solid #dee2e6; border-radius: 0.25rem; margin-bottom: 1em; background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .vuln-header { background-color: #dc3545; color: white; padding: 0.75em 1.25em; border-bottom: 1px solid #dee2e6; font-weight: bold; }
+        .vuln-body { padding: 1.25em; }
+        .no-vuln { padding: 1.25em; color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 0.25rem; }
     </style>
 </head>
 <body>
@@ -16,16 +22,16 @@
         <textarea id="prompt-text" placeholder="Enter your prompt here..."></textarea>
         <button type="submit">Analyze</button>
     </form>
-    <div id="results">
-        <pre>Results will appear here...</pre>
+    <div id="results-container">
+        <p>Results will appear here...</p>
     </div>
 
     <script>
         document.getElementById('prompt-form').addEventListener('submit', async (event) => {
             event.preventDefault();
             const promptText = document.getElementById('prompt-text').value;
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<pre>Analyzing...</pre>';
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = '<p>Analyzing...</p>';
 
             try {
                 const response = await fetch('/analyze', {
@@ -34,9 +40,35 @@
                     body: JSON.stringify({ prompt: promptText })
                 });
                 const data = await response.json();
-                resultsDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                
+                resultsContainer.innerHTML = '';
+
+                if (data.vulnerabilities && data.vulnerabilities.length > 0) {
+                    data.vulnerabilities.forEach(vuln => {
+                        const card = document.createElement('div');
+                        card.className = 'vuln-card';
+
+                        const header = document.createElement('div');
+                        header.className = 'vuln-header';
+                        header.textContent = `Category: ${vuln.category}`;
+
+                        const body = document.createElement('div');
+                        body.className = 'vuln-body';
+                        body.innerHTML = `<p><strong>Description:</strong> ${vuln.description}</p><p><strong>Confidence:</strong> ${vuln.confidence}</p>`;
+
+                        card.appendChild(header);
+                        card.appendChild(body);
+                        resultsContainer.appendChild(card);
+                    });
+                } else {
+                    const noVulnMessage = document.createElement('div');
+                    noVulnMessage.className = 'no-vuln';
+                    noVulnMessage.textContent = 'No vulnerabilities found.';
+                    resultsContainer.appendChild(noVulnMessage);
+                }
+
             } catch (error) {
-                resultsDiv.innerHTML = `<pre>Error: ${error.message}</pre>`;
+                resultsContainer.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
             }
         });
     </script>

@@ -4,7 +4,7 @@ from typing import Iterator
 from ..schemas import Vulnerability
 
 INVISIBLE_CATEGORIES = ("Cf", "Cc", "Zs")
-ALLOWED_CHARS = (" ",)
+ALLOWED_CHARS = (" ", "\n", "\r")
 
 
 class InvisibleCharacterDetector:
