@@ -4,7 +4,7 @@ from typing import Iterator
 from ..schemas import Vulnerability
 
 DNS_COMMAND_PATTERN = re.compile(
-    r"\b(nslookup|dig|host|ping)\s+.*?[$\(`'" "]", re.IGNORECASE
+    r"`\s*(?:nslookup|dig|host|ping).*?`", re.IGNORECASE | re.DOTALL
 )
 
 
