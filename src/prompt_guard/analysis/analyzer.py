@@ -1,5 +1,6 @@
 from .detectors.config_file_write import ConfigFileWriteDetector
 from .detectors.dns_exfiltration import DnsExfiltrationDetector
+from .detectors.invisible_character import InvisibleCharacterDetector
 from .detectors.markdown_exfiltration import MarkdownImageExfiltrationDetector
 from .schemas import AnalysisResult
 
@@ -10,6 +11,7 @@ class PromptAnalyzer:
             MarkdownImageExfiltrationDetector(),
             DnsExfiltrationDetector(),
             ConfigFileWriteDetector(),
+            InvisibleCharacterDetector(),
         ]
 
     def analyze(self, prompt: str) -> AnalysisResult:
