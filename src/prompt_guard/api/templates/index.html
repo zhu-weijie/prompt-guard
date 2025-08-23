@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptGuard</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        textarea { width: 100%; height: 150px; margin-bottom: 1em; }
+        #results { margin-top: 1em; padding: 1em; border: 1px solid #ccc; background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>PromptGuard Analysis</h1>
+    <form id="prompt-form">
+        <textarea id="prompt-text" placeholder="Enter your prompt here..."></textarea>
+        <button type="submit">Analyze</button>
+    </form>
+    <div id="results">
+        <pre>Results will appear here...</pre>
+    </div>
+
+    <script>
+        document.getElementById('prompt-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const promptText = document.getElementById('prompt-text').value;
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<pre>Analyzing...</pre>';
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: promptText })
+                });
+                const data = await response.json();
+                resultsDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                resultsDiv.innerHTML = `<pre>Error: ${error.message}</pre>`;
+            }
+        });
+    </script>
+</body>
+</html>
